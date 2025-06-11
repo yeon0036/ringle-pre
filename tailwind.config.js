@@ -1,6 +1,8 @@
+// tailwind.config.js
 /** @type {import('tailwindcss').Config} */
 module.exports = {
   content: [
+    './app/**/*.{js,ts,jsx,tsx}',
     './pages/**/*.{js,ts,jsx,tsx}',
     './components/**/*.{js,ts,jsx,tsx}',
   ],
@@ -9,8 +11,8 @@ module.exports = {
       colors: {
         primary: '#0b57d0',
         secondary: '#039be5',
-        gray: '#dde3ea',
-        black: '#1f1f1f',
+        customGray: '#dde3ea',
+        customBlack: '#1f1f1f',
         white: '#ffffff',
       },
       fontFamily: {
