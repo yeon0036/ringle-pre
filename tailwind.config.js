@@ -11,8 +11,8 @@ module.exports = {
       colors: {
         primary: '#0b57d0',
         secondary: '#039be5',
-        customGray: '#dde3ea',
-        customBlack: '#1f1f1f',
+        'custom-gray': '#dde3ea',
+        'custom-black': '#1f1f1f',
         white: '#ffffff',
       },
       fontFamily: {

@@ -2,8 +2,8 @@ import Image from 'next/image';
 
 export default function Header() {
   return (
-    <header className='flex w-full items-center bg-customGray'>
-      <div className='ml-4'>
+    <header className='flex w-fullitems-center border-b border-gray-300'>
+      <div className='pl-20 py-5'>
         <Image
           src='/logo.png'
           alt='Logo'

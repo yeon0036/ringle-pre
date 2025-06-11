@@ -15,7 +15,6 @@ export default function RootLayout({
       </head>
       <body>
         <Header />
-        <div className='bg-primary text-gray-400 p-4'>Tailwind 작동 확인</div>
         {children}
       </body>
     </html>
