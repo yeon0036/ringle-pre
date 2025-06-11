@@ -11,9 +11,6 @@ export default function Header() {
           height={60}
           className='object-contain'
         />
-        <div className='bg-red-500 text-white p-4 text-lg font-bold'>
-          Tailwind Test
-        </div>
       </div>
     </header>
   );
