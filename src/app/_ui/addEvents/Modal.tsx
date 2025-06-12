@@ -1,4 +1,6 @@
 import { XMarkIcon } from "@heroicons/react/24/solid";
+import Input from "@/app/components/Input";
+import Button from "@/app/components/Button";
 
 interface AddEventsModalProps {
   isOpen: boolean;
@@ -9,10 +11,6 @@ interface AddEventsModalProps {
 function AddEventsModal({ isOpen, onClose, selectedDate }: AddEventsModalProps) {
   if (!isOpen) return null;
 
-    const defaultDateValue = selectedDate
-    ? selectedDate.toISOString().split('T')[0]
-    : '';
-
   return (
     <div className="absolute top-50 left-4 z-50 bg-white p-6 rounded-lg shadow-lg w-[400px] border border-gray-200">
       <div className="flex justify-between items-center mb-4">
@@ -22,21 +20,27 @@ function AddEventsModal({ isOpen, onClose, selectedDate }: AddEventsModalProps) 
         </button>
       </div>
       <form className="flex flex-col gap-4">
-        <label className="flex flex-col">
-          일정 제목
-          <input className="border-b" type="text" name="title" required />
-        </label>
-        <label className="flex flex-col">
-          설명
-          <input type="text" name="description" />
-        </label>
-        <label className="flex flex-col">
-          날짜
-          <input type="date" name="date" required />
-        </label>
-        <button type="submit" defaultValue={defaultDateValue} className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded">
+        <Input
+        label="일정 제목"
+          type="text"
+          placeholder="일정 제목"
+          className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          required
+        />
+         <Input
+          label="일정 상세"
+          type="text"
+          placeholder="일정 상세"
+          className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+          <input
+    type="hidden"
+    name="datetime"
+    value={selectedDate ? selectedDate.toISOString() : ''}
+  />
+        <Button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded">
           일정 등록하기
-        </button>
+        </Button>
       </form>
     </div>
   );
