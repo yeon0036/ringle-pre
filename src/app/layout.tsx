@@ -1,11 +1,7 @@
 import './globals.css';
-import Header from './_ui/header';
+import Header from './_ui/Header';
 
-export default function RootLayout({
-  children,
-}: {
-  children: React.ReactNode;
-}) {
+export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
     <html lang='ko'>
       <head>
