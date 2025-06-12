@@ -15,25 +15,45 @@ const getWeekDates = (baseDate: Date) => {
   });
 };
 
-export default function MainCalendar({className}: {className?: string}) {
+export default function MainCalendar({
+  className,
+  selectedDate,
+  baseDate,
+}: {
+  className?: string;
+  selectedDate?: Date;
+  baseDate?: Date;
+}) {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [weekDates, setWeekDates] = useState<Date[]>(() =>
     getWeekDates(new Date()),
   );
 
   useEffect(() => {
+    if (selectedDate) {
+      setCurrentDate(selectedDate);
+      setWeekDates(getWeekDates(selectedDate));
+    } else if (baseDate) {
+      setCurrentDate(baseDate);
+      setWeekDates(getWeekDates(baseDate));
+    }
+  }, [selectedDate, baseDate]);
+
+  useEffect(() => {
     console.log(currentDate); //에러 방지용
   }, [currentDate]);
 
   return (
-    <div className={` ${className ?? ''}`}>
+    <div className={` h-screen ${className ?? ''}`}>
       <DayController
         onWeekChange={(week, current) => {
           setWeekDates(week);
           setCurrentDate(current);
         }}
       />
-      <Calendar weekDates={weekDates} />
+      <div className='flex-1 overflow-y-auto'>
+        <Calendar weekDates={weekDates} />
+      </div>
     </div>
   );
 }

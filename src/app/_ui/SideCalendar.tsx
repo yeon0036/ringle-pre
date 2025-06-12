@@ -4,14 +4,17 @@ import {useState} from 'react';
 import {ChevronRightIcon, ChevronLeftIcon} from '@heroicons/react/24/solid';
 
 const getMonthDates = (year: number, month: number): Date[][] => {
-  const firstDayOfMonth = new Date(year, month, 1); // MM/01
-  const startDayOfWeek = firstDayOfMonth.getDay(); // 01의 요일 반환
-  //const daysInMonth = new Date(year, month + 1, 0).getDate(); //  MM의 마지막 날
+  const firstDayOfMonth = new Date(year, month, 1);
+  const startDayOfWeek = firstDayOfMonth.getDay();
+  const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+  const totalDays = startDayOfWeek + daysInMonth;
+  const totalWeeks = Math.ceil(totalDays / 7);
 
   const startDate = new Date(year, month, 1 - startDayOfWeek);
   const calendar: Date[][] = [];
 
-  for (let week = 0; week < 6; week++) {
+  for (let week = 0; week < totalWeeks; week++) {
     const weekRow: Date[] = [];
     for (let day = 0; day < 7; day++) {
       const date = new Date(startDate);
@@ -24,7 +27,15 @@ const getMonthDates = (year: number, month: number): Date[][] => {
   return calendar;
 };
 
-export default function SideCalendar({className}: {className?: string}) {
+export default function SideCalendar({
+  className,
+  selectedDate,
+  onDateChange,
+}: {
+  className?: string;
+  selectedDate?: Date;
+  onDateChange?: (date: Date) => void;
+}) {
   const [today] = useState(new Date());
   const [currentMonth, setCurrentMonth] = useState(today.getMonth());
   const [currentYear, setCurrentYear] = useState(today.getFullYear());
@@ -48,20 +59,25 @@ export default function SideCalendar({className}: {className?: string}) {
   };
 
   return (
-    <div className={`${className ?? ''}`}>
-      <div>
-        <button
-          onClick={() => handleMonthChange(-1)}
-          className='cursor-pointer'
-        >
-          <ChevronLeftIcon />
-        </button>
-        <span>
-          {currentYear}.{currentMonth + 1}
-        </span>
-        <button onClick={() => handleMonthChange(1)} className='cursor-pointer'>
-          <ChevronRightIcon />
-        </button>
+    <div className={`${className ?? ''} `}>
+      <div className='bg-white rounded-xl p-4 h-auto'>
+        <div className='flex justify-between items-center mb-4'>
+          <button
+            onClick={() => handleMonthChange(-1)}
+            className='cursor-pointer'
+          >
+            <ChevronLeftIcon className='h-4 w-4' />
+          </button>
+          <span>
+            {currentYear}.{currentMonth + 1}
+          </span>
+          <button
+            onClick={() => handleMonthChange(1)}
+            className='cursor-pointer'
+          >
+            <ChevronRightIcon className='h-4 w-4' />
+          </button>
+        </div>
         <table>
           <thead>
             <tr>
@@ -78,12 +94,32 @@ export default function SideCalendar({className}: {className?: string}) {
                     date.getDate() === today.getDate() &&
                     date.getMonth() === today.getMonth() &&
                     date.getFullYear() === today.getFullYear();
+
+                  const isCurrentMonth = date.getMonth() === currentMonth;
+
+                  const isSelectedDate =
+                    selectedDate &&
+                    selectedDate.getDate() === date.getDate() &&
+                    selectedDate.getMonth() === date.getMonth() &&
+                    selectedDate.getFullYear() === date.getFullYear();
+
+                  const cellStyle = isToday
+                    ? 'bg-[#0842a0] text-white font-semibold rounded-full'
+                    : isSelectedDate
+                    ? 'bg-[#c2e7ff] font-semibold rounded-full'
+                    : '';
+
                   return (
                     <td
                       key={dateIndex}
-                      className={`p-2 ${isToday ? 'bg-blue-100' : 'bg-white'}`}
+                      className={`p-3 text-center ${cellStyle} ${
+                        !isCurrentMonth ? 'text-gray-400' : ''
+                      }`}
                     >
-                      <button className='cursor-pointer'>
+                      <button
+                        onClick={() => onDateChange && onDateChange(date)}
+                        className='cursor-pointer w-8 h-8 flex items-center justify-center'
+                      >
                         {date.getDate()}
                       </button>
                     </td>

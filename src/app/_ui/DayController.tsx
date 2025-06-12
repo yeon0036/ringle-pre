@@ -29,12 +29,12 @@ export default function DayController({
         onClick={() => updateWeek(subWeeks(currentDate, 1))}
         className='flex items-center text-gray-700 cursor-pointer'
       >
-        <ChevronLeftIcon className='w-10 h-10' />
+        <ChevronLeftIcon className='w-6 h-6' />
       </button>
 
       <button
         onClick={() => updateWeek(new Date())}
-        className='text-4xl font-light text-gray-800'
+        className='text-xl font-base text-gray-800'
       >
         {monthLabel}
       </button>
@@ -43,7 +43,7 @@ export default function DayController({
         onClick={() => updateWeek(addWeeks(currentDate, 1))}
         className='flex items-center text-gray-700 cursor-pointer'
       >
-        <ChevronRightIcon className='w-10 h-10' />
+        <ChevronRightIcon className='w-6 h-6' />
       </button>
     </div>
   );
