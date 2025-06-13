@@ -1,5 +1,6 @@
 import './globals.css';
 import Header from './_ui/Header';
+import Provider from './Provider';
 
 export default function RootLayout({children}: {children: React.ReactNode}) {
   return (
@@ -10,8 +11,10 @@ export default function RootLayout({children}: {children: React.ReactNode}) {
         <title>정혜연-Ringle pre-assignment</title>
       </head>
       <body>
-        <Header />
-        {children}
+        <Provider>
+          <Header />
+          {children}
+        </Provider>
       </body>
     </html>
   );

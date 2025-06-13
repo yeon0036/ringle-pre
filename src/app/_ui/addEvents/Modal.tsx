@@ -1,8 +1,10 @@
+'use client';
+
 import { XMarkIcon } from "@heroicons/react/24/solid";
 import Input from "@/app/components/Input";
 import Button from "@/app/components/Button";
-import useClickOutside from "@/app/hooks/useClickOutside";
-import { useRef } from "react";
+import useClickOutside from "@/hooks/useClickOutside";
+import { useEffect, useRef, useState } from "react";
 
 interface AddEventsModalProps {
   isOpen: boolean;
@@ -11,9 +13,22 @@ interface AddEventsModalProps {
   onClickOutside?: () => void;
 }
 
+function toDateTimeLocal(date:Date) {
+  const pad = (n: number) => n.toString().padStart(2, '0');
+    return `${date.getFullYear()}-${pad(date.getMonth() + 1)}-${pad(date.getDate())}T${pad(date.getHours())}:${pad(date.getMinutes())}`;
+}
+
+
 function AddEventsModal({ isOpen, onClose, selectedDate, onClickOutside }: AddEventsModalProps) {
+  const [datetimeValue, setDatetiemValue] = useState('');
   const modalRef = useRef<HTMLDivElement>(null);
   useClickOutside(modalRef, onClickOutside ?? onClose);
+
+  useEffect(() => {
+    if(selectedDate) {
+      setDatetiemValue(toDateTimeLocal(selectedDate));
+    }
+  }, [selectedDate])
 
   if (!isOpen) return null;
 
@@ -38,6 +53,14 @@ function AddEventsModal({ isOpen, onClose, selectedDate, onClickOutside }: AddEv
           type="text"
           placeholder="일정 상세"
           className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+        />
+        <Input
+          label="날짜, 시간"
+          type="datetime-local"
+          placeholder="날짜, 시간"
+          className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+          value={datetimeValue}
+          onChange={(e => setDatetiemValue(e.target.value))}
         />
           <input
             type="hidden"

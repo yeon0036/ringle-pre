@@ -1,9 +1,11 @@
 'use client';
 
-import {useState} from 'react';
-import {ChevronRightIcon, ChevronLeftIcon} from '@heroicons/react/24/solid';
+import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/solid';
+import { useSelector, useDispatch } from 'react-redux';
+import { RootState } from '@/store';
+import { setSelectedDate, previousMonth, nextMonth } from '@/store/calendarSlice';
 
-const getMonthDates = (year: number, month: number): Date[][] => {
+function getMonthDates(year: number, month: number): Date[][] {
   const firstDayOfMonth = new Date(year, month, 1);
   const startDayOfWeek = firstDayOfMonth.getDay();
   const daysInMonth = new Date(year, month + 1, 0).getDate();
@@ -25,7 +27,8 @@ const getMonthDates = (year: number, month: number): Date[][] => {
   }
 
   return calendar;
-};
+}
+
 
 export default function SideCalendar({
   className,
@@ -36,45 +39,31 @@ export default function SideCalendar({
   selectedDate?: Date;
   onDateChange?: (date: Date) => void;
 }) {
-  const [today] = useState(new Date());
-  const [currentMonth, setCurrentMonth] = useState(today.getMonth());
-  const [currentYear, setCurrentYear] = useState(today.getFullYear());
+  const dispatch = useDispatch();
+  const { year, month } = useSelector((state: RootState) => state.calendar);
 
-  const monthDates = getMonthDates(currentYear, currentMonth);
+  const today = new Date();
 
-  const handleMonthChange = (offset: number) => {
-    let newMonth = currentMonth + offset;
-    let newYear = currentYear;
+  const monthDates = getMonthDates(year, month);
 
-    if (newMonth < 0) {
-      newMonth = 11;
-      newYear -= 1;
-    } else if (newMonth > 11) {
-      newMonth = 0;
-      newYear += 1;
-    }
-
-    setCurrentMonth(newMonth);
-    setCurrentYear(newYear);
+  const handlePrevMonth = () => dispatch(previousMonth());
+  const handleNextMonth = () => dispatch(nextMonth());
+  const handleDateClick = (date: Date) => {
+    dispatch(setSelectedDate(date.toISOString()));
+    if (onDateChange) onDateChange(date);
   };
 
   return (
-    <section className={`${className ?? ''} `}>
+    <section className={`${className ?? ''}`}>
       <div className='bg-white rounded-xl p-2 h-auto'>
         <div className='flex justify-between items-center mb-4'>
-          <button
-            onClick={() => handleMonthChange(-1)}
-            className='cursor-pointer'
-          >
+          <button onClick={handlePrevMonth} className='cursor-pointer'>
             <ChevronLeftIcon className='h-4 w-4' />
           </button>
           <span>
-            {currentYear}.{currentMonth + 1}
+            {year}.{month + 1}
           </span>
-          <button
-            onClick={() => handleMonthChange(1)}
-            className='cursor-pointer'
-          >
+          <button onClick={handleNextMonth} className='cursor-pointer'>
             <ChevronRightIcon className='h-4 w-4' />
           </button>
         </div>
@@ -95,7 +84,7 @@ export default function SideCalendar({
                     date.getMonth() === today.getMonth() &&
                     date.getFullYear() === today.getFullYear();
 
-                  const isCurrentMonth = date.getMonth() === currentMonth;
+                  const isCurrentMonth = date.getMonth() === month;
 
                   const isSelectedDate =
                     selectedDate &&
@@ -117,7 +106,7 @@ export default function SideCalendar({
                       }`}
                     >
                       <button
-                        onClick={() => onDateChange && onDateChange(date)}
+                        onClick={() => handleDateClick(date)}
                         className='cursor-pointer w-10 h-10 flex items-center justify-center hover:bg-blue-200 rounded-full'
                       >
                         {date.getDate()}

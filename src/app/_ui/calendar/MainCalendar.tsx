@@ -1,65 +1,50 @@
 'use client';
 
-import {useState, useEffect} from 'react';
+import { useSelector } from 'react-redux';
+import { RootState } from '@/store';
 import Calendar from './Calendar';
 import DayController from './DayController';
+import AddEventsModal from '../addEvents/Modal';
+import { useState } from 'react';
 
-const getWeekDates = (baseDate: Date) => {
+function getWeekDates(baseDate: Date): Date[] {
   const startOfWeek = new Date(baseDate);
   startOfWeek.setDate(baseDate.getDate() - baseDate.getDay());
   startOfWeek.setHours(0, 0, 0, 0);
-  return Array.from({length: 7}).map((_, i) => {
+  return Array.from({ length: 7 }).map((_, i) => {
     const d = new Date(startOfWeek);
     d.setDate(startOfWeek.getDate() + i);
     return d;
   });
-};
+}
 
-export default function MainCalendar({
-  className,
-  selectedDate,
-  baseDate,
-  getTimeClick
-}: {
-  className?: string;
-  selectedDate?: Date;
-  baseDate?: Date;
-  getTimeClick?: (date: Date) => void;
-}) {
-  const [currentDate, setCurrentDate] = useState<Date>(new Date());
-  const [weekDates, setWeekDates] = useState<Date[]>(() =>
-    getWeekDates(new Date()),
-  );
+export default function MainCalendar({ className }: { className?: string }) {
+  const [isModalOpen, setModalOpen] = useState(false);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(null);
 
-  useEffect(() => {
-    if (selectedDate) {
-      setCurrentDate(selectedDate);
-      setWeekDates(getWeekDates(selectedDate));
-    } else if (baseDate) {
-      setCurrentDate(baseDate);
-      setWeekDates(getWeekDates(baseDate));
-    }
-  }, [selectedDate, baseDate]);
+  const handleTimeClick = (date: Date) => {
+    setSelectedDate(date);
+    setModalOpen(true);
+  };
 
-  useEffect(() => {
-    console.log(currentDate); //에러 방지용
-  }, [currentDate]);
+  const selectedDateString = useSelector((state: RootState) => state.calendar.selectedDate);
+  const selectedDateRedux = selectedDateString ? new Date(selectedDateString) : new Date();
+  const weekDates = getWeekDates(selectedDateRedux);
 
   return (
-    <section className={` h-screen ${className ?? ''}`}>
-      <DayController
-        onWeekChange={(week, current) => {
-          setWeekDates(week);
-          setCurrentDate(current);
-        }}
+    <section className={`h-screen ${className ?? ''}`}>
+      <DayController />
+      <div className='flex-1 overflow-y-auto'>
+        <Calendar
+          weekDates={weekDates}
+          onClick={handleTimeClick}
+        />
+      </div>
+      <AddEventsModal
+        isOpen={isModalOpen}
+        onClose={() => setModalOpen(false)}
         selectedDate={selectedDate}
       />
-      <div className='flex-1 overflow-y-auto'>
-         <Calendar
-      weekDates={weekDates}
-      onClick={(date) => getTimeClick?.(date)}
-    />
-      </div>
     </section>
   );
 }
