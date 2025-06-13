@@ -5,6 +5,8 @@ import Input from "@/app/components/Input";
 import Button from "@/app/components/Button";
 import useClickOutside from "@/hooks/useClickOutside";
 import { useEffect, useRef, useState } from "react";
+import { addEvent } from "@/store/eventSlice";
+import { useDispatch } from "react-redux";
 
 interface AddEventsModalProps {
   isOpen: boolean;
@@ -20,15 +22,44 @@ function toDateTimeLocal(date:Date) {
 
 
 function AddEventsModal({ isOpen, onClose, selectedDate, onClickOutside }: AddEventsModalProps) {
-  const [datetimeValue, setDatetiemValue] = useState('');
-  const modalRef = useRef<HTMLDivElement>(null);
+   const modalRef = useRef<HTMLDivElement>(null);
+  const dispatch = useDispatch();
+ const [title, setTitle] = useState('');
+ const [description, setDescription] = useState('')
+const [start, setStart] = useState('');
+const [end, setEnd] = useState('');
+
+useEffect(() => {
+  if(selectedDate) {
+    const init = toDateTimeLocal(selectedDate);
+    setStart(init);
+    const dateCopy = new Date(selectedDate);
+    dateCopy.setHours(dateCopy.getHours() + 1);
+    setEnd(toDateTimeLocal(dateCopy));
+  }
+}, [selectedDate]);
+
   useClickOutside(modalRef, onClickOutside ?? onClose);
 
-  useEffect(() => {
-    if(selectedDate) {
-      setDatetiemValue(toDateTimeLocal(selectedDate));
-    }
-  }, [selectedDate])
+  const handleAddEvent = (e: React.FormEvent) => {
+    e.preventDefault();
+    if(!title || !start || !end) return;
+
+    dispatch(
+      addEvent({
+        id: crypto.randomUUID(),
+        title, 
+        description,
+        start, 
+        end,
+      })
+    )
+    setTitle('')
+      setDescription('')
+      setStart('')
+      setEnd('')
+    onClose();
+  };
 
   if (!isOpen) return null;
 
@@ -40,33 +71,34 @@ function AddEventsModal({ isOpen, onClose, selectedDate, onClickOutside }: AddEv
           <XMarkIcon className="h-6 w-6 cursor-pointer" />
         </button>
       </div>
-      <form className="flex flex-col gap-4">
+      <form className="flex flex-col gap-4" onSubmit={handleAddEvent}>
         <Input
-        label="일정 제목"
-          type="text"
-          placeholder="일정 제목"
-          className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          required
-        />
-         <Input
-          label="일정 상세"
-          type="text"
-          placeholder="일정 상세"
-          className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-        />
-        <Input
-          label="날짜, 시간"
-          type="datetime-local"
-          placeholder="날짜, 시간"
-          className="border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          value={datetimeValue}
-          onChange={(e => setDatetiemValue(e.target.value))}
-        />
-          <input
-            type="hidden"
-            name="datetime"
-            value={selectedDate ? selectedDate.toISOString() : ''}
-          />
+  label="일정 제목"
+  type="text"
+  value={title}
+  onChange={e => setTitle(e.target.value)}
+  required
+/>
+<Input
+  label="일정 상세"
+  type="text"
+  value={description}
+  onChange={e => setDescription(e.target.value)}
+/>
+<Input
+  label="시작"
+  type="datetime-local"
+  value={start}
+  onChange={e => setStart(e.target.value)}
+  required
+/>
+<Input
+  label="종료"
+  type="datetime-local"
+  value={end}
+  onChange={e => setEnd(e.target.value)}
+  required
+/>
         <Button type="submit" className="bg-blue-500 hover:bg-blue-700 text-white px-4 py-2 rounded">
           일정 등록하기
         </Button>

@@ -3,8 +3,8 @@
 import {useState} from 'react';
 import MainCalendar from './_ui/calendar/MainCalendar';
 import SideCalendar from './_ui/calendar/SideCalendar';
-import AddEventsButton from './_ui/addEvents/Button';
-import AddEventsModal from './_ui/addEvents/Modal';
+import AddEventsButton from './_ui/events/Button';
+import AddEventsModal from './_ui/events/addEventModal';
 
 export default function Home() {
 const [selectedDate, setSelectedDate] = useState<Date | null>(null);

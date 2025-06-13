@@ -1,11 +1,12 @@
 'use client';
 
 import { useSelector } from 'react-redux';
-import { RootState } from '@/store';
+import { RootState,  } from '@/store';
 import Calendar from './Calendar';
 import DayController from './DayController';
-import AddEventsModal from '../addEvents/Modal';
+import AddEventsModal from '../events/addEventModal';
 import { useState } from 'react';
+
 
 function getWeekDates(baseDate: Date): Date[] {
   const startOfWeek = new Date(baseDate);
@@ -30,6 +31,7 @@ export default function MainCalendar({ className }: { className?: string }) {
   const selectedDateString = useSelector((state: RootState) => state.calendar.selectedDate);
   const selectedDateRedux = selectedDateString ? new Date(selectedDateString) : new Date();
   const weekDates = getWeekDates(selectedDateRedux);
+const events = useSelector((state: RootState) => state.events.events);
 
   return (
     <section className={`h-screen ${className ?? ''}`}>
@@ -38,6 +40,7 @@ export default function MainCalendar({ className }: { className?: string }) {
         <Calendar
           weekDates={weekDates}
           onClick={handleTimeClick}
+          events={events}
         />
       </div>
       <AddEventsModal
