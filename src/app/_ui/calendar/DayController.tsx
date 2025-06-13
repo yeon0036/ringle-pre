@@ -1,12 +1,14 @@
-import {useState} from 'react';
+import {useEffect, useState} from 'react';
 import {subWeeks, addWeeks, format} from 'date-fns';
 import {ko} from 'date-fns/locale';
 import {ChevronRightIcon, ChevronLeftIcon} from '@heroicons/react/24/solid';
 
 export default function DayController({
   onWeekChange,
+  selectedDate,
 }: {
   onWeekChange: (weekDates: Date[], current: Date) => void;
+  selectedDate?: Date;
 }) {
   const [currentDate, setCurrentDate] = useState(new Date());
 
@@ -20,6 +22,12 @@ export default function DayController({
     setCurrentDate(date);
     onWeekChange(weekDates, date);
   };
+
+  useEffect(() => {
+    if (selectedDate) {
+      updateWeek(selectedDate);
+    }
+  }, [selectedDate]);
 
   const monthLabel = format(currentDate, 'yyyy년 M월', {locale: ko});
 

@@ -19,10 +19,12 @@ export default function MainCalendar({
   className,
   selectedDate,
   baseDate,
+  getTimeClick
 }: {
   className?: string;
   selectedDate?: Date;
   baseDate?: Date;
+  getTimeClick?: (date: Date) => void;
 }) {
   const [currentDate, setCurrentDate] = useState<Date>(new Date());
   const [weekDates, setWeekDates] = useState<Date[]>(() =>
@@ -44,16 +46,20 @@ export default function MainCalendar({
   }, [currentDate]);
 
   return (
-    <div className={` h-screen ${className ?? ''}`}>
+    <section className={` h-screen ${className ?? ''}`}>
       <DayController
         onWeekChange={(week, current) => {
           setWeekDates(week);
           setCurrentDate(current);
         }}
+        selectedDate={selectedDate}
       />
       <div className='flex-1 overflow-y-auto'>
-        <Calendar weekDates={weekDates} />
+         <Calendar
+      weekDates={weekDates}
+      onClick={(date) => getTimeClick?.(date)}
+    />
       </div>
-    </div>
+    </section>
   );
 }

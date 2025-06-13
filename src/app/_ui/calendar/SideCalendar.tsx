@@ -59,8 +59,8 @@ export default function SideCalendar({
   };
 
   return (
-    <div className={`${className ?? ''} `}>
-      <div className='bg-white rounded-xl p-4 h-auto'>
+    <section className={`${className ?? ''} `}>
+      <div className='bg-white rounded-xl p-2 h-auto'>
         <div className='flex justify-between items-center mb-4'>
           <button
             onClick={() => handleMonthChange(-1)}
@@ -80,7 +80,7 @@ export default function SideCalendar({
         </div>
         <table>
           <thead>
-            <tr>
+            <tr className='text-sm'>
               {['sun', 'mon', 'Tue', 'Wed', 'Thr', 'Fri', 'Sat'].map((day) => (
                 <th key={day}>{day}</th>
               ))}
@@ -104,21 +104,21 @@ export default function SideCalendar({
                     selectedDate.getFullYear() === date.getFullYear();
 
                   const cellStyle = isToday
-                    ? 'bg-[#0842a0] text-white font-semibold rounded-full'
+                    ? 'bg-blue-600 text-white font-semibold rounded-full'
                     : isSelectedDate
-                    ? 'bg-[#c2e7ff] font-semibold rounded-full'
+                    ? 'bg-blue-200 font-semibold rounded-full'
                     : '';
 
                   return (
                     <td
                       key={dateIndex}
-                      className={`p-3 text-center ${cellStyle} ${
+                      className={`p-1 text-center ${cellStyle} ${
                         !isCurrentMonth ? 'text-gray-400' : ''
                       }`}
                     >
                       <button
                         onClick={() => onDateChange && onDateChange(date)}
-                        className='cursor-pointer w-8 h-8 flex items-center justify-center'
+                        className='cursor-pointer w-10 h-10 flex items-center justify-center hover:bg-blue-200 rounded-full'
                       >
                         {date.getDate()}
                       </button>
@@ -130,6 +130,6 @@ export default function SideCalendar({
           </tbody>
         </table>
       </div>
-    </div>
+    </section>
   );
 }
