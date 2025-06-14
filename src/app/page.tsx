@@ -17,8 +17,8 @@ export default function Home() {
   };
 
   return (
-    <div className="items-top my-12 flex min-h-screen w-full gap-10 px-12">
-      <div className="flex flex-col gap-4">
+    <div className="items-top my-12 flex min-h-screen w-full gap-4 px-5 md:gap-10 md:px-12">
+      <div className="flex flex-col gap-3 md:gap-4">
         <AddEventsButton
           className="flex justify-start"
           onClick={handleAddEventClick}
@@ -35,7 +35,6 @@ export default function Home() {
         />
         <SideCalendar
           className="shrink-0"
-          selectedDate={selectedDate ?? undefined}
           onDateChange={(date) => setSelectedDate(date)}
         />
       </div>

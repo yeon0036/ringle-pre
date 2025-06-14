@@ -14,7 +14,7 @@ interface AddEventsModalProps {
   onClose: () => void;
   selectedDate?: Date | null;
   onClickOutside?: () => void;
-  event: EventType;
+  event?: EventType;
 }
 
 function toDateTimeLocal(date: Date) {
