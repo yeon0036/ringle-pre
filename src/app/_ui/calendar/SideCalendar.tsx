@@ -73,20 +73,20 @@ export default function SideCalendar({
         {/* 헤더: 월 이동 */}
         <div className="mb-4 flex items-center justify-between">
           <button onClick={handlePrevMonth} className="cursor-pointer">
-            <ChevronLeftIcon className="h-4 w-4" />
+            <ChevronLeftIcon className="h-2 w-2 md:h-4 md:w-4" />
           </button>
-          <span>
+          <span className="md:text-md text-xs">
             {year}.{month + 1}
           </span>
           <button onClick={handleNextMonth} className="cursor-pointer">
-            <ChevronRightIcon className="h-4 w-4" />
+            <ChevronRightIcon className="h-2 w-2 md:h-4 md:w-4" />
           </button>
         </div>
 
         {/* 달력 */}
         <table>
           <thead>
-            <tr className="text-sm">
+            <tr className="text-xs md:text-sm">
               {["sun", "mon", "Tue", "Wed", "Thr", "Fri", "Sat"].map((day) => (
                 <th key={day}>{day}</th>
               ))}
@@ -109,7 +109,7 @@ export default function SideCalendar({
                   const isCurrentMonth = date.getMonth() === month;
 
                   const cellStyle = isToday
-                    ? "bg-blue-600 text-white font-semibold rounded-full"
+                    ? "bg-blue-500 text-white font-semibold rounded-full"
                     : isSelected
                       ? "bg-blue-200 font-semibold rounded-full"
                       : "";
@@ -117,13 +117,13 @@ export default function SideCalendar({
                   return (
                     <td
                       key={dateIndex}
-                      className={`p-1 text-center ${cellStyle} ${
+                      className={`md:text-md p-1 text-center text-xs ${cellStyle} ${
                         !isCurrentMonth ? "text-gray-400" : ""
                       }`}
                     >
                       <button
                         onClick={() => handleDateClick(date)}
-                        className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-blue-200"
+                        className="flex h-5 w-5 items-center justify-center rounded-full hover:bg-blue-200 md:h-10 md:w-10"
                       >
                         {date.getDate()}
                       </button>

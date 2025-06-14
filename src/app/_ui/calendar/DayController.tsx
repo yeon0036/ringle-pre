@@ -23,16 +23,16 @@ export default function DayController() {
   const monthLabel = format(selectedDate, "yyyy년 M월", { locale: ko });
 
   return (
-    <div className="mb-3 flex items-center items-start justify-center gap-[200px] rounded-xl bg-white p-4">
+    <div className="mb-3 flex items-center items-start justify-center gap-[100px] rounded-md bg-white p-2 md:gap-[200px] md:rounded-xl md:p-4">
       <button
         onClick={() => handleWeekChange(subWeeks(selectedDate, 1))}
         className="flex cursor-pointer items-center text-gray-700"
       >
-        <ChevronLeftIcon className="h-6 w-6" />
+        <ChevronLeftIcon className="h-4 w-4 md:h-6 md:w-6" />
       </button>
       <button
         onClick={() => handleWeekChange(new Date())}
-        className="font-base text-xl text-gray-800"
+        className="font-base text-md text-gray-800 md:text-xl"
       >
         {monthLabel}
       </button>
@@ -40,7 +40,7 @@ export default function DayController() {
         onClick={() => handleWeekChange(addWeeks(selectedDate, 1))}
         className="flex cursor-pointer items-center text-gray-700"
       >
-        <ChevronRightIcon className="h-6 w-6" />
+        <ChevronRightIcon className="h-4 w-4 md:h-6 md:w-6" />
       </button>
     </div>
   );
