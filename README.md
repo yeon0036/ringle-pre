@@ -1,7 +1,7 @@
 # 📅 정혜연 - Ringle Pre-assignment
 
 <img src='/public/image.png' alt='미리보기'/>
-Next.js 기반 주간 캘린더 앱입니다. 일정 등록, 수정, 삭제 기능과 월 이동, 분 단위 표시, 겹침 처리 등을 포함합니다.
+Next.js 기반 주간 캘린더 앱입니다.
 
 ---
 
@@ -18,7 +18,7 @@ Next.js 기반 주간 캘린더 앱입니다. 일정 등록, 수정, 삭제 기�
 
 ## 🛠️ 기술 스택
 
-- **Next.js 14** (App Router)
+- **Next.js 15** (App Router)
 - **TypeScript**
 - **Redux Toolkit**
 - **Tailwind CSS**
