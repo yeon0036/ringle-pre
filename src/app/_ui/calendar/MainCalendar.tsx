@@ -24,7 +24,13 @@ export default function MainCalendar({ className }: { className?: string }) {
   const [isAddModalOpen, setAddModalOpen] = useState(false);
   const [isEditModalOpen, setEditModalOpen] = useState(false);
   const [selectedDate, setSelectedDate] = useState<Date | null>(null);
-  const [event, setEvent] = useState<EventType>("");
+  const [event, setEvent] = useState<EventType>({
+    id: "",
+    title: "",
+    description: "",
+    start: "",
+    end: "",
+  });
 
   const handleTimeClick = (date: Date) => {
     setSelectedDate(date);

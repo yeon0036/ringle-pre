@@ -3,11 +3,7 @@
 import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/24/solid";
 import { useSelector, useDispatch } from "react-redux";
 import { RootState } from "@/store";
-import {
-  setSelectedDate,
-  previousMonth,
-  nextMonth,
-} from "@/store/calendarSlice";
+import { setSelectedDate } from "@/store/calendarSlice";
 
 function getMonthDates(year: number, month: number): Date[][] {
   const firstDayOfMonth = new Date(year, month, 1);
@@ -35,30 +31,46 @@ function getMonthDates(year: number, month: number): Date[][] {
 
 export default function SideCalendar({
   className,
-  selectedDate,
   onDateChange,
 }: {
   className?: string;
-  selectedDate?: Date;
   onDateChange?: (date: Date) => void;
 }) {
   const dispatch = useDispatch();
-  const { year, month } = useSelector((state: RootState) => state.calendar);
+
+  const selectedDateString = useSelector(
+    (state: RootState) => state.calendar.selectedDate
+  );
+  const selectedDate = selectedDateString
+    ? new Date(selectedDateString)
+    : new Date();
 
   const today = new Date();
-
+  const year = selectedDate.getFullYear();
+  const month = selectedDate.getMonth();
   const monthDates = getMonthDates(year, month);
 
-  const handlePrevMonth = () => dispatch(previousMonth());
-  const handleNextMonth = () => dispatch(nextMonth());
+  const handlePrevMonth = () => {
+    const prev = new Date(selectedDate);
+    prev.setMonth(prev.getMonth() - 1);
+    dispatch(setSelectedDate(prev.toISOString()));
+  };
+
+  const handleNextMonth = () => {
+    const next = new Date(selectedDate);
+    next.setMonth(next.getMonth() + 1);
+    dispatch(setSelectedDate(next.toISOString()));
+  };
+
   const handleDateClick = (date: Date) => {
     dispatch(setSelectedDate(date.toISOString()));
     if (onDateChange) onDateChange(date);
   };
 
   return (
-    <section className={`${className ?? ""}`}>
-      <div className="h-auto rounded-xl bg-white p-2">
+    <section className={className ?? ""}>
+      <div className="rounded-xl bg-white p-2">
+        {/* 헤더: 월 이동 */}
         <div className="mb-4 flex items-center justify-between">
           <button onClick={handlePrevMonth} className="cursor-pointer">
             <ChevronLeftIcon className="h-4 w-4" />
@@ -70,6 +82,8 @@ export default function SideCalendar({
             <ChevronRightIcon className="h-4 w-4" />
           </button>
         </div>
+
+        {/* 달력 */}
         <table>
           <thead>
             <tr className="text-sm">
@@ -87,17 +101,16 @@ export default function SideCalendar({
                     date.getMonth() === today.getMonth() &&
                     date.getFullYear() === today.getFullYear();
 
-                  const isCurrentMonth = date.getMonth() === month;
-
-                  const isSelectedDate =
-                    selectedDate &&
+                  const isSelected =
                     selectedDate.getDate() === date.getDate() &&
                     selectedDate.getMonth() === date.getMonth() &&
                     selectedDate.getFullYear() === date.getFullYear();
 
+                  const isCurrentMonth = date.getMonth() === month;
+
                   const cellStyle = isToday
                     ? "bg-blue-600 text-white font-semibold rounded-full"
-                    : isSelectedDate
+                    : isSelected
                       ? "bg-blue-200 font-semibold rounded-full"
                       : "";
 
@@ -110,7 +123,7 @@ export default function SideCalendar({
                     >
                       <button
                         onClick={() => handleDateClick(date)}
-                        className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full hover:bg-blue-200"
+                        className="flex h-10 w-10 items-center justify-center rounded-full hover:bg-blue-200"
                       >
                         {date.getDate()}
                       </button>
