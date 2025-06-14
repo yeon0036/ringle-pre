@@ -1,6 +1,6 @@
 export default function Input({
   className,
-  type = 'text',
+  type = "text",
   placeholder,
   value,
   onChange,
@@ -17,19 +17,19 @@ export default function Input({
 }) {
   return (
     <div>
-    {label && (
-  <label className="text-sm font-medium text-gray-700 mb-1 block">
-    {label}
-  </label>
-)}
-    <input
-      type={type}
-      placeholder={placeholder}
-      value={value}
-      onChange={onChange}
-      className={`w-full p-2 border-b border-gray-300 ${className}`}
-      required={required}
-    />
+      {label && (
+        <label className="mb-1 block text-sm font-medium text-gray-700">
+          {label}
+        </label>
+      )}
+      <input
+        type={type}
+        placeholder={placeholder}
+        value={value}
+        onChange={onChange}
+        className={`w-full border-b border-gray-300 p-2 ${className}`}
+        required={required}
+      />
     </div>
   );
 }
