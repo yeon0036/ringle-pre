@@ -1,9 +1,13 @@
-'use client';
+"use client";
 
-import { ChevronRightIcon, ChevronLeftIcon } from '@heroicons/react/24/solid';
-import { useSelector, useDispatch } from 'react-redux';
-import { RootState } from '@/store';
-import { setSelectedDate, previousMonth, nextMonth } from '@/store/calendarSlice';
+import { ChevronRightIcon, ChevronLeftIcon } from "@heroicons/react/24/solid";
+import { useSelector, useDispatch } from "react-redux";
+import { RootState } from "@/store";
+import {
+  setSelectedDate,
+  previousMonth,
+  nextMonth,
+} from "@/store/calendarSlice";
 
 function getMonthDates(year: number, month: number): Date[][] {
   const firstDayOfMonth = new Date(year, month, 1);
@@ -29,7 +33,6 @@ function getMonthDates(year: number, month: number): Date[][] {
   return calendar;
 }
 
-
 export default function SideCalendar({
   className,
   selectedDate,
@@ -54,23 +57,23 @@ export default function SideCalendar({
   };
 
   return (
-    <section className={`${className ?? ''}`}>
-      <div className='bg-white rounded-xl p-2 h-auto'>
-        <div className='flex justify-between items-center mb-4'>
-          <button onClick={handlePrevMonth} className='cursor-pointer'>
-            <ChevronLeftIcon className='h-4 w-4' />
+    <section className={`${className ?? ""}`}>
+      <div className="h-auto rounded-xl bg-white p-2">
+        <div className="mb-4 flex items-center justify-between">
+          <button onClick={handlePrevMonth} className="cursor-pointer">
+            <ChevronLeftIcon className="h-4 w-4" />
           </button>
           <span>
             {year}.{month + 1}
           </span>
-          <button onClick={handleNextMonth} className='cursor-pointer'>
-            <ChevronRightIcon className='h-4 w-4' />
+          <button onClick={handleNextMonth} className="cursor-pointer">
+            <ChevronRightIcon className="h-4 w-4" />
           </button>
         </div>
         <table>
           <thead>
-            <tr className='text-sm'>
-              {['sun', 'mon', 'Tue', 'Wed', 'Thr', 'Fri', 'Sat'].map((day) => (
+            <tr className="text-sm">
+              {["sun", "mon", "Tue", "Wed", "Thr", "Fri", "Sat"].map((day) => (
                 <th key={day}>{day}</th>
               ))}
             </tr>
@@ -93,21 +96,21 @@ export default function SideCalendar({
                     selectedDate.getFullYear() === date.getFullYear();
 
                   const cellStyle = isToday
-                    ? 'bg-blue-600 text-white font-semibold rounded-full'
+                    ? "bg-blue-600 text-white font-semibold rounded-full"
                     : isSelectedDate
-                    ? 'bg-blue-200 font-semibold rounded-full'
-                    : '';
+                      ? "bg-blue-200 font-semibold rounded-full"
+                      : "";
 
                   return (
                     <td
                       key={dateIndex}
                       className={`p-1 text-center ${cellStyle} ${
-                        !isCurrentMonth ? 'text-gray-400' : ''
+                        !isCurrentMonth ? "text-gray-400" : ""
                       }`}
                     >
                       <button
                         onClick={() => handleDateClick(date)}
-                        className='cursor-pointer w-10 h-10 flex items-center justify-center hover:bg-blue-200 rounded-full'
+                        className="flex h-10 w-10 cursor-pointer items-center justify-center rounded-full hover:bg-blue-200"
                       >
                         {date.getDate()}
                       </button>

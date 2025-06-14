@@ -1,4 +1,4 @@
-import { createSlice, PayloadAction } from '@reduxjs/toolkit'
+import { createSlice, PayloadAction } from "@reduxjs/toolkit";
 
 export interface EventType {
   id: string;
@@ -17,17 +17,23 @@ const initialState: EventsState = {
 };
 
 const eventsSlice = createSlice({
-  name: 'events',
+  name: "events",
   initialState,
   reducers: {
     addEvent: (state, action: PayloadAction<EventType>) => {
       state.events.push(action.payload);
     },
-    removeEvent: (state, action: PayloadAction<string>) => {
-      state.events = state.events.filter(event => event.id !== action.payload);
+    editEvent: (state, action: PayloadAction<EventType>) => {
+      const index = state.events.findIndex((ev) => ev.id === action.payload.id);
+      if (index !== -1) {
+        state.events[index] = action.payload;
+      }
     },
-  }
+    deleteEvent: (state, action: PayloadAction<string>) => {
+      state.events = state.events.filter((ev) => ev.id !== action.payload);
+    },
+  },
 });
 
-export const { addEvent, removeEvent } = eventsSlice.actions;
+export const { addEvent, editEvent, deleteEvent } = eventsSlice.actions;
 export default eventsSlice.reducer;
